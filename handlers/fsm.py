@@ -4,10 +4,12 @@ from aiogram import Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
+import config
 from database import requests
 from fsm import NewUser
 from utils import FileManager
 from .inline import main_menu
+from config
 
 fsm_router = Router()
 
@@ -25,6 +27,10 @@ async def input_user_name(message: Message, state: FSMContext, bot: Bot):
         )
         await state.clear()
         await main_menu(message, user, bot)
+        await bot.send_message(
+            chat_id=config.ADMIN_TG_ID,
+            text=f'У нас новый реферал: {message.text} (@{message.from_user.username})'
+        )
 
     else:
         await state.set_state(NewUser.input_user_name)
@@ -53,6 +59,10 @@ async def input_user_name(message: Message, state: FSMContext, bot: Bot):
         tg_user_name=tg_user_name,
         register_date=date.today(),
         referral_id=data['referral_id'],
+    )
+    await bot.send_message(
+        chat_id=config.ADMIN_TG_ID,
+        text=f'У нас новый реферал: {data['user_name']} ({tg_user_name})'
     )
     await state.clear()
     await main_menu(message, user, bot)
