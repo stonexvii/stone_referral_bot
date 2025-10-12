@@ -1,7 +1,8 @@
-from sqlalchemy import String, BigInteger, Integer, Date
+from datetime import date
+
+from sqlalchemy import String, BigInteger, Date
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
-from datetime import date
 
 
 class Base(AsyncAttrs, DeclarativeBase):

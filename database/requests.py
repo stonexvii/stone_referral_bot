@@ -1,9 +1,8 @@
-from aiogram.types import Message
-
-from sqlalchemy import select, insert
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from datetime import date
-import config
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from .db_engine import async_session, engine
 from .tables import Base, Users
 

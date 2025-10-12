@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from .admin_router import admin_router
+from .admin import admin_router
 from .command import command_router
 from .inline import inline_router
 from .fsm import fsm_router

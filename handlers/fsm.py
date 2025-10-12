@@ -1,22 +1,19 @@
-from aiogram import Router
-from aiogram.filters import Command, CommandObject
-from aiogram.types import Message
-from aiogram.fsm.context import FSMContext
-
 from datetime import date
 
-import config
-# from classes import FileManager
+from aiogram import Router, Bot
+from aiogram.fsm.context import FSMContext
+from aiogram.types import Message
+
 from database import requests
-from database.tables import Users
 from fsm import NewUser
-from keyboards import ikb_user_main_menu
+from utils import FileManager
+from .inline import main_menu
 
 fsm_router = Router()
 
 
 @fsm_router.message(NewUser.input_name)
-async def input_user_name(message: Message, state: FSMContext):
+async def input_user_name(message: Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     if message.from_user.username:
         user = await requests.new_user(
@@ -26,9 +23,9 @@ async def input_user_name(message: Message, state: FSMContext):
             register_date=date.today(),
             referral_id=data['referral_id'],
         )
-        message_text = f'Привет, {user.user_name}!\nВот твоя реферальная ссылка:\n{config.REFERRAL_LINK_BASE}{message.from_user.id}\n\nДелись ей со своими друзьями! Они получат скидку от меня, а ты получишь кэшбек от сделки'
-        keyboard = ikb_user_main_menu()
         await state.clear()
+        await main_menu(message, user, bot)
+
     else:
         await state.set_state(NewUser.input_user_name)
         await state.update_data(
@@ -36,16 +33,14 @@ async def input_user_name(message: Message, state: FSMContext):
                 'user_name': message.text,
             }
         )
-        message_text = 'Telegram не даёт мне доступ к твоему нику в телеграм\nУкажи его самостоятельно, пожалуйста\n(или ссылку на свой канал)'
-        keyboard = None
-    await message.answer(
-        text=message_text,
-        reply_markup=keyboard,
-    )
+        message_text = await FileManager.read('input_user_name', name=message.text)
+        await message.answer(
+            text=message_text,
+        )
 
 
 @fsm_router.message(NewUser.input_user_name)
-async def input_user_name(message: Message, state: FSMContext):
+async def input_user_name(message: Message, state: FSMContext, bot: Bot):
     tg_user_name = message.text
     if tg_user_name.startswith('http'):
         tg_user_name = '@' + tg_user_name.rsplit('/', 1)[-1]
@@ -59,10 +54,5 @@ async def input_user_name(message: Message, state: FSMContext):
         register_date=date.today(),
         referral_id=data['referral_id'],
     )
-    message_text = f'Привет, {user.user_name}!\nВот твоя реферальная ссылка:\n{config.REFERRAL_LINK_BASE}{message.from_user.id}\n\nДелись ей со своими друзьями! Они получат скидку от меня, а ты получишь кэшбек от сделки'
-    keyboard = ikb_user_main_menu()
-    await message.answer(
-        text=message_text,
-        reply_markup=keyboard,
-    )
     await state.clear()
+    await main_menu(message, user, bot)

@@ -1,4 +1,4 @@
-from .admin import AdminMiddleware
+from .middleware import AdminMiddleware
 
 __all__ = [
     'AdminMiddleware',

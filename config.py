@@ -2,8 +2,6 @@ import os
 
 import dotenv
 
-# from classes import FileManager
-
 dotenv.load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')

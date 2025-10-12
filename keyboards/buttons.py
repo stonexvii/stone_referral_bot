@@ -1,4 +1,8 @@
-from keyboards.callback_data import UserMainMenu
+from collections import namedtuple
+
+from .callback_data import UserMainMenu
+
+Button = namedtuple('Button', ['text', 'callback'])
 
 
 class UserMainMenuButton:
