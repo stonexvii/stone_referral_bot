@@ -9,7 +9,6 @@ from database import requests
 from fsm import NewUser
 from utils import FileManager
 from .inline import main_menu
-import config
 
 fsm_router = Router()
 
