@@ -26,7 +26,7 @@ async def command_start(message: Message, command: CommandObject, state: FSMCont
         )
     else:
         keyboard = ikb_user_main_menu()
-        message_text = f'Привет, {user.user_name}!\nВот твоя реферальная ссылка:\n{config.REFERRAL_LINK_BASE}{message.from_user.id}\n\nДелись ей со своими друзьями! Они получат скидку от меня, а ты получишь кэшбек от сделки'
+        message_text =
     await message.answer(
         text=message_text,
         reply_markup=keyboard,

@@ -13,6 +13,21 @@ Button = namedtuple('Button', ['text', 'callback'])
 def ikb_user_main_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
+        UserMainMenuButton('💡 Разгоны', button='about_referral'),
+        UserMainMenuButton('Рефералы 💰', button='my_referrals'),
+        UserMainMenuButton('ℹ️ Кто такой Стоун?', url=config.CHANNEL_URL),
+        UserMainMenuButton('Связь со Стоуном ✉️', button='contact_stone'),
+    ]
+    for button in buttons:
+        keyboard.button(**button.as_kwargs())
+
+    keyboard.adjust(2, 2)
+    return keyboard.as_markup()
+
+
+def ikb_referrals_menu():
+    keyboard = InlineKeyboardBuilder()
+    buttons = [
         UserMainMenuButton('Зачем нужна реферальная ссылка?', button='about_referral'),
         UserMainMenuButton('Твои рефералы', button='my_referrals'),
         UserMainMenuButton('Кто такой Стоун?', url=config.CHANNEL_URL),
