@@ -8,8 +8,8 @@ from .fsm import fsm_router
 main_router = Router()
 
 main_router.include_routers(
+    admin_router,
     fsm_router,
     command_router,
     inline_router,
-    admin_router,
 )

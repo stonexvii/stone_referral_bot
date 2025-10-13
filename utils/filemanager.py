@@ -15,6 +15,13 @@ class FileManager:
         return 'None'
 
     @classmethod
+    async def read_file(cls, path: str):
+        if path := os.path.join(cls._DIR_MESSAGES, path):
+            async with aiofiles.open(path, 'rb') as file:
+                response = await file.read()
+            return response
+
+    @classmethod
     async def write(cls, path: str, data: str):
         path = os.path.join(cls._DIR_MESSAGES, path + '.txt')
         async with aiofiles.open(path, 'w', encoding='UTF-8') as file:
