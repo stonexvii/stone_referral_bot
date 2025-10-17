@@ -13,7 +13,7 @@ def ikb_welcome(text: str, callback: str):
 def ikb_main_menu(user: Users):
     keyboard = InlineKeyboardBuilder()
     buttons = [
-        MainMenuButton('🎤 Кто такой Стоун? 🎤', button='about_stone'),
+        MainMenuButton('⭐️ Кто такой Стоун? ⭐️', button='about_stone'),
         MainMenuButton('🛠 Проекты', button='projects'),
         MainMenuButton('Рефералы 💌', button='referrals_menu'),
         MainMenuButton('✉️ Написать в личку ✉️', url='https://t.me/STONE_XVII'),

@@ -41,7 +41,7 @@ async def new_referral_handler(callback: CallbackQuery, user: Users, bot: Bot):
         msg_text = 'Спасибо!\nТеперь ты реферал\nТвоя персональная ссылка ждет тебя в твоем лично кабинете'
         await bot.send_message(
             chat_id=config.ADMIN_TG_ID,
-            text=f'У нас новый реферал: {user.name} (@{user.tg_username})'
+            text=f'⭐️ У нас новый реферал:\n{user.name}\n@{user.tg_username}'
         )
         await requests.new_referral(
             user_tg_id=user.id,

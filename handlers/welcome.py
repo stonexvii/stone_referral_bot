@@ -5,6 +5,7 @@ from aiogram.filters import CommandObject
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message, InputMediaPhoto
 
+import config
 from database import requests
 from database.tables import Users
 from fsm.states import NewUser
@@ -99,6 +100,10 @@ async def welcome_last(callback: CallbackQuery, user: Users, state: FSMContext, 
         media=InputMediaPhoto(**media),
         reply_markup=ikb_main_menu(user),
     )
+    await bot.send_message(
+        chat_id=config.ADMIN_TG_ID,
+        text=f'🥳 У нас новый пользователь:\n{user.name}\n@{user.tg_username}'
+    )
     await state.clear()
 
 
@@ -122,5 +127,9 @@ async def user_new_name(message: Message, user: Users, state: FSMContext, bot: B
         message_id=message_id,
         media=InputMediaPhoto(**media),
         reply_markup=ikb_main_menu(user),
+    )
+    await bot.send_message(
+        chat_id=config.ADMIN_TG_ID,
+        text=f'🥳 У нас новый пользователь:\n{message.text}\n@{user.tg_username}'
     )
     await state.clear()
