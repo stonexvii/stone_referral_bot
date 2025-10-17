@@ -1,18 +1,12 @@
-from aiogram import Router, Bot, F
-from aiogram.types import CallbackQuery, Message, InputMediaPhoto
+from aiogram import Router, Bot
 from aiogram.fsm.context import FSMContext
-import config
-import messages
-from database import requests
+from aiogram.types import CallbackQuery
+
 from database.tables import Users
-from keyboards import ikb_back, ikb_main_menu, ikb_dispersal_menu, ikb_referrals_menu, ikb_about_menu
-from keyboards.callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton
-from middlewares.middleware import UserMiddleware
-from utils import FileManager
-from fsm.states import NewReferral
 from handlers.main_menu import callback_main_menu
-from .referrals import referrals_menu_handler
+from keyboards.callback_data import CallbackBackButton
 from .projects import projects_menu
+from .referrals import referrals_menu_handler
 
 back_button_router = Router()
 

@@ -5,14 +5,14 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, InputMediaPhoto
 
 import config
+import messages
 from database import requests
 from database.tables import Users
 from fsm.states import NewReferral
-from utils import FileManager
-from .main_menu import message_main_menu
-import messages
 from keyboards import ikb_back
 from middlewares.middleware import UserMiddleware
+from utils import FileManager
+from .main_menu import message_main_menu
 
 fsm_router = Router()
 fsm_router.message.middleware(UserMiddleware())
@@ -27,13 +27,6 @@ async def input_name(message: Message, state: FSMContext, user: Users, bot: Bot)
             name=message.from_user.full_name,
             tg_username=message.from_user.username,
         )
-        # user = await requests.new_user(
-        #     user_tg_id=message.from_user.id,
-        #     user_name=message.text,
-        #     tg_user_name='@' + message.from_user.username,
-        #     register_date=date.today(),
-        #     referral_id=data['referral_id'],
-        # )
         await bot.delete_message(
             chat_id=message.from_user.id,
             message_id=message.message_id,

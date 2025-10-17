@@ -1,17 +1,17 @@
+from datetime import date
+
 from aiogram import Router, Bot, F
 from aiogram.filters import CommandObject
-from aiogram.types import CallbackQuery, Message, InputMediaPhoto
 from aiogram.fsm.context import FSMContext
-import config
-import messages
+from aiogram.types import CallbackQuery, Message, InputMediaPhoto
+
 from database import requests
 from database.tables import Users
-from keyboards import ikb_welcome, ikb_back, ikb_main_menu, ikb_dispersal_menu, ikb_referrals_menu, ikb_about_menu
-from keyboards.callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton, CallbackWelcome
-from middlewares.middleware import UserMiddleware
-from utils import FileManager
 from fsm.states import NewUser
-from datetime import date
+from keyboards import ikb_welcome, ikb_main_menu
+from keyboards.callback_data import CallbackWelcome
+from middlewares.middleware import UserMiddleware
+from utils import FileManager, MessagePath
 
 welcome_router = Router()
 welcome_router.message.middleware(UserMiddleware())
@@ -24,18 +24,19 @@ async def welcome_start(message: Message, command: CommandObject, state: FSMCont
         referral_id = int(command.args)
         referral = await requests.get_user(referral_id)
         referral_name = referral.name
-        msg_text = await FileManager.read('welcome_first', referral_name=referral_name)
+        msg_text = await FileManager.read(MessagePath.TEXT, 'welcome_start', referral_name=referral_name)
     else:
-        msg_text = await FileManager.read('welcome_first_wor')
+        msg_text = await FileManager.read(MessagePath.TEXT, 'welcome_start_wor')
         referral_name = None
     await state.update_data(
         {
             'referral': referral_name,
         }
     )
+    msg_pict = await FileManager.read(MessagePath.PICT, 'welcome_start')
     await bot.send_photo(
         chat_id=message.from_user.id,
-        photo=messages.WELCOME_START,
+        photo=msg_pict,
         caption=msg_text,
         reply_markup=ikb_welcome('Кто такой Стоун?', 'first_step'),
     )
@@ -50,14 +51,13 @@ async def welcome_start(message: Message, command: CommandObject, state: FSMCont
 
 @welcome_router.callback_query(CallbackWelcome.filter(F.button == 'first_step'))
 async def welcome_next(callback: CallbackQuery, bot: Bot):
-    msg_text = await FileManager.read('welcome_second')
+    media = await FileManager.media_kwargs(
+        text='welcome_stone',
+    )
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(
-            media=messages.WELCOME_STONE,
-            caption=msg_text,
-        ),
+        media=InputMediaPhoto(**media),
         reply_markup=ikb_welcome('Да, в чём твоя польза?', 'second_step'),
     )
 
@@ -74,29 +74,30 @@ async def welcome_last(callback: CallbackQuery, state: FSMContext, bot: Bot):
     referral = ''
     if referral_name:
         referral = f' (та самая, которая тебе досталась от {referral_name}'
-    msg_text = await FileManager.read('welcome_name', referral_name=referral, name=callback.from_user.full_name)
+    media = await FileManager.media_kwargs(
+        text='welcome_hub',
+        referral_name=referral,
+        name=callback.from_user.full_name,
+    )
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(
-            media=messages.WELCOME_HUB,
-            caption=msg_text,
-        ),
+        media=InputMediaPhoto(**media),
         reply_markup=ikb_welcome('Пропустить', 'skip'),
     )
 
 
 @welcome_router.callback_query(CallbackWelcome.filter(F.button == 'skip'))
 async def welcome_last(callback: CallbackQuery, user: Users, state: FSMContext, bot: Bot):
-    msg_text = await FileManager.read('main_menu', name=user.name)
+    media = await FileManager.media_kwargs(
+        text='main_menu',
+        name=user.name,
+    )
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(
-            media=messages.MAIN_PICT,
-            caption=msg_text,
-        ),
-        reply_markup=ikb_main_menu(),
+        media=InputMediaPhoto(**media),
+        reply_markup=ikb_main_menu(user),
     )
     await state.clear()
 
@@ -112,14 +113,14 @@ async def user_new_name(message: Message, user: Users, state: FSMContext, bot: B
         chat_id=message.from_user.id,
         message_id=message.message_id,
     )
-    msg_text = await FileManager.read('main_menu', name=message.text)
+    media = await FileManager.media_kwargs(
+        text='main_menu',
+        name=message.text,
+    )
     await bot.edit_message_media(
         chat_id=message.from_user.id,
         message_id=message_id,
-        media=InputMediaPhoto(
-            media=messages.MAIN_PICT,
-            caption=msg_text,
-        ),
-        reply_markup=ikb_main_menu(),
+        media=InputMediaPhoto(**media),
+        reply_markup=ikb_main_menu(user),
     )
     await state.clear()

@@ -1,40 +1,45 @@
+import os.path
+
 from aiogram import Router, Bot, F
-from aiogram.types import CallbackQuery, Message, InputMediaPhoto
-from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, InputMediaPhoto, FSInputFile
+
 import config
-import messages
 from database import requests
 from database.tables import Users
-from keyboards import ikb_back, ikb_main_menu, ikb_dispersal_menu, ikb_referrals_menu, ikb_about_menu
-from keyboards.callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton
+from keyboards import ikb_about_menu
+from keyboards.callback_data import CallbackMainMenu
 from middlewares.middleware import UserMiddleware
 from utils import FileManager
-from fsm.states import NewReferral
 
 about_router = Router()
 about_router.callback_query.middleware(UserMiddleware())
 
 
 @about_router.callback_query(CallbackMainMenu.filter(F.button == 'about_stone'))
-async def about_handler(callback: CallbackQuery, user: Users, bot: Bot):
-    msg_text = await FileManager.read('about')
+async def about_handler(callback: CallbackQuery, bot: Bot):
+    media = await FileManager.media_kwargs(
+        text='about',
+    )
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(
-            media=messages.ABOUT_PICT,
-            caption=msg_text,
-        ),
+        media=InputMediaPhoto(**media),
         reply_markup=ikb_about_menu(),
     )
 
 
 @about_router.callback_query(CallbackMainMenu.filter(F.button == 'download_pdf'))
-async def download_handler(callback: CallbackQuery, user: Users, bot: Bot):
-    await callback.answer(
-        text='PDF в разработке!\nБудет доступно позже',
-        show_alert=True,
-    )
+async def download_handler(callback: CallbackQuery, bot: Bot):
+    if os.path.exists(r'messages/promo.pdf'):
+        await bot.send_document(
+            chat_id=callback.from_user.id,
+            document=FSInputFile(r'messages/promo.pdf')
+        )
+    else:
+        await callback.answer(
+            text='PDF в разработке!\nБудет доступно позже',
+            show_alert=True,
+        )
 
 
 @about_router.callback_query(CallbackMainMenu.filter(F.button == 'contact_stone'))

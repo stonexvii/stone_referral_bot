@@ -1,8 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-import config
-from .buttons import MainMenuButton, ReferralMenuButton, BackButton, WelcomeButton, ProjectButton
 from database.tables import Users
+from .buttons import MainMenuButton, ReferralMenuButton, BackButton, WelcomeButton, ProjectButton
 
 
 def ikb_welcome(text: str, callback: str):
@@ -11,15 +10,16 @@ def ikb_welcome(text: str, callback: str):
     return keyboard.as_markup()
 
 
-def ikb_main_menu():
+def ikb_main_menu(user: Users):
     keyboard = InlineKeyboardBuilder()
     buttons = [
         MainMenuButton('🎤 Кто такой Стоун? 🎤', button='about_stone'),
         MainMenuButton('🛠 Проекты', button='projects'),
         MainMenuButton('Рефералы 💌', button='referrals_menu'),
-        MainMenuButton('📲 Оставить заявку 📲', button='contact_stone'),
         MainMenuButton('✉️ Написать в личку ✉️', url='https://t.me/STONE_XVII'),
     ]
+    if user.tg_username:
+        buttons.append(MainMenuButton('📲 Оставить заявку 📲', button='contact_stone'))
     for button in buttons:
         keyboard.button(**button.as_kwargs())
 
