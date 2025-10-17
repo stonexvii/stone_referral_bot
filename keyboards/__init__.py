@@ -1,8 +1,13 @@
-from .inline_keyboards import ikb_user_main_menu, ikb_back, ikb_dispersal_menu, ikb_referrals_menu
+from .inline_keyboards import ikb_main_menu, ikb_back, ikb_dispersal_menu, ikb_referrals_menu, ikb_about_menu, \
+    ikb_welcome, ikb_projects_menu, ikb_event_fix
 
 __all__ = [
+    'ikb_event_fix',
+    'ikb_projects_menu',
+    'ikb_welcome',
+    'ikb_about_menu',
     'ikb_dispersal_menu',
     'ikb_referrals_menu',
-    'ikb_user_main_menu',
+    'ikb_main_menu',
     'ikb_back',
 ]

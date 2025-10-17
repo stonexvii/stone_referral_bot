@@ -37,10 +37,10 @@ async def command_set(message: Message, bot: Bot):
     )
 
 
-@admin_router.message(F.document)
+@admin_router.message(F.photo)
 async def all_messages(message: Message, bot: Bot):
     for key, value in dict(message).items():
         if value:
             print(key, value)
-    file = await bot.get_file(message.document.file_id)
-    await bot.download_file(file.file_path, 'messages/promo.pdf')
+    # file = await bot.get_file(message.document.file_id)
+    # await bot.download_file(file.file_path, 'messages/promo.pdf')

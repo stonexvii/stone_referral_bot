@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .db_engine import async_session, engine
@@ -33,14 +33,15 @@ async def get_user(user_tg_id: int, session: AsyncSession):
 
 
 @connection
-async def new_user(user_tg_id: int, user_name: str, tg_user_name: str, register_date: date, referral_id: int | None,
+async def new_user(user_tg_id: int, name: str, tg_username: str, register_date: date, referral_id: int | None,
                    session: AsyncSession) -> Users:
     user = Users(
         id=user_tg_id,
-        user_name=user_name,
-        tg_user_name=tg_user_name,
+        name=name,
+        tg_username=tg_username,
         referral_id=referral_id,
         register_date=register_date,
+        balance=0,
     )
     session.add(user)
     await session.commit()
@@ -49,8 +50,22 @@ async def new_user(user_tg_id: int, user_name: str, tg_user_name: str, register_
 
 
 @connection
+async def update_name(user_tg_id: int, name: str, session: AsyncSession):
+    stmt = update(Users).where(Users.id == user_tg_id).values(name=name)
+    await session.execute(stmt)
+    await session.commit()
+
+
+@connection
+async def new_referral(user_tg_id: int, session: AsyncSession):
+    stmt = update(Users).where(Users.id == user_tg_id).values(is_referral=True)
+    await session.execute(stmt)
+    await session.commit()
+
+
+@connection
 async def get_referrals(user_tg_id: int, session: AsyncSession):
-    response = await session.scalars(select(Users.user_name).where(Users.referral_id == user_tg_id))
+    response = await session.scalars(select(Users).where(Users.referral_id == user_tg_id))
     return response.all()
 
 #
