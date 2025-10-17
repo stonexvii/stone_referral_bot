@@ -3,6 +3,7 @@ from aiogram.filters import Command, CommandObject
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
+from database import requests
 from database.tables import Users
 from keyboards import ikb_main_menu
 from middlewares.middleware import UserMiddleware
@@ -28,3 +29,24 @@ async def command_start(message: Message, user: Users, command: CommandObject, s
         )
     else:
         await welcome_start(message, command, state, bot)
+
+
+@command_router.message(Command('rename'))
+async def rename_user(message: Message, user: Users, command: CommandObject):
+    if user and command.args:
+        await message.answer(
+            text=f'''Я обновил твое имя в нашей базе данных
+Теперь буду называть тебя - {command.args}
+Кстати, все твои рефералы, будут видеть это же имя!
+Для перехода в главное меню используй команду /start''',
+        )
+        await requests.update_name(
+            user_tg_id=message.from_user.id,
+            name=command.args,
+        )
+    else:
+        await message.answer(
+            text=f'''Если хочешь изменить свое имя используй команду /rename и желаемое имя
+Например:
+/rename Олег Трубкин''',
+        )
