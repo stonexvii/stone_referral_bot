@@ -22,9 +22,14 @@ async def command_start(message: Message, user: Users, command: CommandObject, s
         msg_text = await FileManager.read('main_menu', name=user.name)
         await bot.send_photo(
             chat_id=message.from_user.id,
-            photo=messages.MAIN_PICT,
+            photo=messages.Pictures.MAIN_PICT.value,
             caption=msg_text,
             reply_markup=ikb_main_menu(),
         )
     else:
         await welcome_start(message, command, state, bot)
+
+
+@command_router.message(Command('json'))
+async def command_json(message: Message):
+    FileManager.write_json('data', pictures)
