@@ -31,8 +31,9 @@ async def set_text(message: Message, command: CommandObject):
 
 @admin_router.message(F.photo)
 async def update_pict(message: Message):
-    pict_names = [file.rsplit('.', 1)[0] for file in os.listdir(MessagePath.PICT.value) if file.endswith('.txt')]
-    file_name = message.caption
+    pict_names = [file.rsplit('.', 1)[0].lower() for file in os.listdir(MessagePath.PICT.value) if
+                  file.endswith('.txt')]
+    file_name = message.caption.lower()
     if file_name in pict_names:
         msg_text = f'{file_name} обновлен!'
         await FileManager.write(MessagePath.PICT, file_name, message.photo[0].file_id)
