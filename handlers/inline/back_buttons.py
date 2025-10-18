@@ -20,4 +20,4 @@ async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton
     elif callback_data.button == 'to_referrals':
         await referrals_menu_handler(callback, user, bot)
     elif callback_data.button == 'to_projects':
-        await projects_menu(callback, user, bot)
+        await projects_menu(callback, bot)

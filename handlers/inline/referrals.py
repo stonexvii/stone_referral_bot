@@ -63,7 +63,7 @@ async def my_referrals(callback: CallbackQuery, user: Users, bot: Bot):
             text='my_referrals',
             name=user.name,
         )
-        media['media'] += '\n'.join(referrals_list)
+        media['caption'] += '\n'+'\n'.join([referral.name for referral in referrals_list])
     else:
         media = await FileManager.media_kwargs(
             text='no_referrals',
