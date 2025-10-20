@@ -45,7 +45,8 @@ def ikb_projects_menu():
     buttons = [
         ProjectButton('💡 Разгоны 💡', 'dispersal'),
         ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
-        ProjectButton('💀 Кошмары невест 💀', 'brides_nightmares'),
+        ProjectButton('🤦🏻‍♂️ Спасибо, б@#ть, за праздник! 🤦🏻‍♂️', 'thx_for_event'),
+        ProjectButton('🤖 ИИвент-агент 🤖', 'ai_event_agent'),
         MainMenuButton('Канал', url='https://t.me/stone_live'),
     ]
     for button in buttons:
@@ -71,6 +72,27 @@ def ikb_event_fix():
     keyboard.button(
         text='Вызвать мастера',
         url='https://t.me/STONE_XVII',
+    )
+    keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+
+def ikb_thx_for_event():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text='Задать вопросы',
+        url='https://t.me/STONE_XVII',
+    )
+    keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+def ikb_ai_event_agent():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text='Перейти в канал',
+        url='https://t.me/thx_for_event',
     )
     keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
     keyboard.adjust(1)
