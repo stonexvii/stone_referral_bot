@@ -30,7 +30,7 @@ def ikb_main_menu(user: Users):
 def ikb_about_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
-        MainMenuButton('Канал', url='https://t.me/stone_event'),
+        MainMenuButton('Канал', url='https://t.me/stone_live'),
         MainMenuButton('Скачать PDF', button='download_pdf'),
         BackButton('Назад'),
     ]
@@ -46,7 +46,7 @@ def ikb_projects_menu():
         ProjectButton('💡 Разгоны 💡', 'dispersal'),
         ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
         ProjectButton('💀 Кошмары невест 💀', 'brides_nightmares'),
-        MainMenuButton('Канал', url='https://t.me/stone_event'),
+        MainMenuButton('Канал', url='https://t.me/stone_live'),
     ]
     for button in buttons:
         keyboard.button(**button.as_kwargs())
