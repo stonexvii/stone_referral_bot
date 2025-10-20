@@ -84,6 +84,10 @@ def ikb_thx_for_event():
         text='Перейти в канал',
         url='https://t.me/thx_for_event',
     )
+    keyboard.button(
+        text='Поделиться историей',
+        url='https://t.me/thx_for_event_bot',
+    )
     keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
     keyboard.adjust(1)
     return keyboard.as_markup()
