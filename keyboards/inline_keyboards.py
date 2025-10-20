@@ -81,18 +81,19 @@ def ikb_event_fix():
 def ikb_thx_for_event():
     keyboard = InlineKeyboardBuilder()
     keyboard.button(
-        text='Задать вопросы',
-        url='https://t.me/STONE_XVII',
+        text='Перейти в канал',
+        url='https://t.me/thx_for_event',
     )
     keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
     keyboard.adjust(1)
     return keyboard.as_markup()
 
+
 def ikb_ai_event_agent():
     keyboard = InlineKeyboardBuilder()
     keyboard.button(
-        text='Перейти в канал',
-        url='https://t.me/thx_for_event',
+        text='Задать вопрос',
+        url='https://t.me/STONE_XVII',
     )
     keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
     keyboard.adjust(1)

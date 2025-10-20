@@ -1,13 +1,14 @@
 from aiogram import Router, Bot, F
 from aiogram.types import CallbackQuery, InputMediaPhoto
 
-from keyboards import ikb_dispersal_menu, ikb_projects_menu, ikb_event_fix, ikb_thx_for_event
+from keyboards import ikb_dispersal_menu, ikb_projects_menu, ikb_event_fix, ikb_thx_for_event, ikb_ai_event_agent
 from keyboards.callback_data import CallbackMainMenu, CallbackProject
 from utils import FileManager
 
 projects_router = Router()
 
 projects = {
+    'ai_event_agent': ikb_ai_event_agent(),
     'dispersal': ikb_dispersal_menu(),
     'event_fix': ikb_event_fix(),
     'thx_for_event': ikb_thx_for_event(),
