@@ -47,6 +47,7 @@ def ikb_projects_menu():
         ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
         ProjectButton('🤦🏻‍♂️ Спасибо, б@#ть, за праздник! 🤦🏻‍♂️', 'thx_for_event'),
         ProjectButton('🤖 ИИвент-агент 🤖', 'ai_event_agent'),
+        ProjectButton('🤖 О, поздравляю! 🤖', 'congrats_robot'),
         MainMenuButton('Канал', url='https://t.me/stone_live'),
     ]
     for button in buttons:
@@ -98,6 +99,17 @@ def ikb_ai_event_agent():
     keyboard.button(
         text='Задать вопрос',
         url='https://t.me/STONE_XVII',
+    )
+    keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+
+def ikb_congrats_robot():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text='Перейти в бота',
+        url='https://t.me/congrats_robot',
     )
     keyboard.button(**BackButton('Назад', 'to_projects').as_kwargs())
     keyboard.adjust(1)
