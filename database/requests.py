@@ -94,3 +94,10 @@ async def get_project(item: str, session: AsyncSession, as_kwargs: bool = True, 
 async def get_all_projects(session: AsyncSession):
     response = await session.scalars(select(Project).where(Project.is_active == True))
     return response.all()
+
+
+@connection
+async def update_pict(user_tg_id: int, name: str, session: AsyncSession):
+    stmt = update(User).where(User.id == user_tg_id).values(name=name)
+    await session.execute(stmt)
+    await session.commit()
