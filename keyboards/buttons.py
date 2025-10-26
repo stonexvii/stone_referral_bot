@@ -1,5 +1,6 @@
 from database.tables import Project, Button
-from .callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton, CallbackWelcome, CallbackProject
+from .callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton, CallbackWelcome, CallbackProject, \
+    CallbackPortfolio
 
 
 class MainMenuButton:
@@ -11,6 +12,17 @@ class MainMenuButton:
             )
         if url:
             self.url = url
+
+    def as_kwargs(self):
+        return self.__dict__
+
+
+class PortfolioButton:
+    def __init__(self, text: str, callback: str):
+        self.text = text
+        self.callback_data = CallbackPortfolio(
+            button=callback,
+        )
 
     def as_kwargs(self):
         return self.__dict__

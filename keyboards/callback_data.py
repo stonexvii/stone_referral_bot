@@ -5,6 +5,10 @@ class CallbackMainMenu(CallbackData, prefix='CMM'):
     button: str
 
 
+class CallbackPortfolio(CallbackData, prefix='CP'):
+    button: str
+
+
 class CallbackReferral(CallbackData, prefix='CR'):
     button: str
 

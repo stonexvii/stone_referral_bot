@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from .db_engine import async_session, engine
-from .tables import Base, User, Menu, Project
+from .tables import Base, User, Menu, Project, Media
 
 MenuData = namedtuple('MenuData', ['text', 'media_id'])
 
@@ -74,9 +74,12 @@ async def get_referrals(user_tg_id: int, session: AsyncSession):
 
 
 @connection
-async def get_menu(item: str, session: AsyncSession, as_kwargs: bool = True, **kwargs) -> Menu | dict | MenuData:
+async def get_menu(item: str, session: AsyncSession, full: bool = False, as_kwargs: bool = True,
+                   **kwargs) -> Menu | dict | MenuData:
     response = await session.scalar(select(Menu).options(selectinload(Menu.media)).where(Menu.name == item))
-    if as_kwargs:
+    if full:
+        return response
+    elif as_kwargs:
         return {'caption': response.description.format(**kwargs), 'media': response.media[0].media_id}
     return MenuData(response.description.format(**kwargs), response.media[0].media_id)
 
@@ -97,7 +100,11 @@ async def get_all_projects(session: AsyncSession):
 
 
 @connection
-async def update_pict(user_tg_id: int, name: str, session: AsyncSession):
-    stmt = update(User).where(User.id == user_tg_id).values(name=name)
-    await session.execute(stmt)
+async def add_portfolio(file_id: str, desc: str, session: AsyncSession):
+    media = Media(
+        menu_id=12,
+        media_id=file_id,
+        description=desc,
+    )
+    session.add(media)
     await session.commit()

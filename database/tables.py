@@ -52,6 +52,7 @@ class Media(Base):
     menu_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('menu.id'), nullable=True)
     project_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('projects.id'), nullable=True)
     media_id: Mapped[str] = mapped_column(String(900), default='Какой-то меню')
+    description: Mapped[str] = mapped_column(String(900), nullable=True)
 
     menu = relationship('Menu', back_populates='media')
     project = relationship('Project', back_populates='media')

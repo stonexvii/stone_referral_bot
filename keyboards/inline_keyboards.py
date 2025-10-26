@@ -1,7 +1,7 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from database.tables import User, Menu, Project
-from .buttons import MainMenuButton, ReferralMenuButton, BackButton, WelcomeButton, ProjectButton
+from .buttons import MainMenuButton, ReferralMenuButton, BackButton, WelcomeButton, ProjectButton, PortfolioButton
 
 
 def ikb_welcome(text: str, callback: str):
@@ -30,13 +30,26 @@ def ikb_main_menu(user: User):
 def ikb_about_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
+        MainMenuButton('Портфолио', button='portfolio'),
         MainMenuButton('Канал', url='https://t.me/stone_live'),
         MainMenuButton('Скачать PDF', button='download_pdf'),
         BackButton('Назад'),
     ]
     for button in buttons:
         keyboard.button(**button.as_kwargs())
-    keyboard.adjust(3, 1)
+    keyboard.adjust(1, 2, 1)
+    return keyboard.as_markup()
+
+
+def ikb_portfolio():
+    keyboard = InlineKeyboardBuilder()
+    buttons = [
+        PortfolioButton('Дальше', 'next'),
+        BackButton('Назад'),
+    ]
+    for button in buttons:
+        keyboard.button(**button.as_kwargs())
+    keyboard.adjust(1, 2, 1)
     return keyboard.as_markup()
 
 

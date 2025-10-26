@@ -2,9 +2,11 @@ from aiogram import Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
+import config
 from database.tables import User
 from handlers.main_menu import callback_main_menu
 from keyboards.callback_data import CallbackBackButton
+from .about import about_handler
 from .projects import projects_menu
 from .referrals import referrals_menu_handler
 
@@ -21,3 +23,6 @@ async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton
         await referrals_menu_handler(callback, user, bot)
     elif callback_data.button == 'to_projects':
         await projects_menu(callback, bot)
+    elif callback_data.button == 'to_about':
+        config.SLIDESHOW_TASK.cancel()
+        await about_handler(callback, bot)
