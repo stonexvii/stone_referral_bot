@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, InputMediaPhoto, FSInputFile
 
 import config
 from database import requests
-from database.tables import Users
+from database.tables import User
 from keyboards import ikb_about_menu
 from keyboards.callback_data import CallbackMainMenu
 from middlewares.middleware import UserMiddleware
@@ -20,10 +20,13 @@ async def about_handler(callback: CallbackQuery, bot: Bot):
     media = await FileManager.media_kwargs(
         text='about',
     )
+    msg_data = await requests.get_menu(
+        'about',
+    )
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(**media),
+        media=InputMediaPhoto(**msg_data),
         reply_markup=ikb_about_menu(),
     )
 
@@ -43,7 +46,7 @@ async def download_handler(callback: CallbackQuery, bot: Bot):
 
 
 @about_router.callback_query(CallbackMainMenu.filter(F.button == 'contact_stone'))
-async def contact_stone(callback: CallbackQuery, user: Users, bot: Bot):
+async def contact_stone(callback: CallbackQuery, user: User, bot: Bot):
     referral_user = await requests.get_user(user.referral_id)
     await bot.send_message(
         chat_id=config.ADMIN_TG_ID,

@@ -1,6 +1,8 @@
 from .inline_keyboards import ikb_main_menu, ikb_back, ikb_dispersal_menu, ikb_referrals_menu, ikb_about_menu, \
     ikb_welcome, ikb_projects_menu, ikb_event_fix, ikb_thx_for_event, ikb_ai_event_agent, ikb_congrats_robot
 
+from .project_keyboards import ikb_project_menu
+
 __all__ = [
     'ikb_congrats_robot',
     'ikb_ai_event_agent',
@@ -13,4 +15,5 @@ __all__ = [
     'ikb_referrals_menu',
     'ikb_main_menu',
     'ikb_back',
+    'ikb_project_menu',
 ]

@@ -2,7 +2,7 @@ from aiogram import Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
-from database.tables import Users
+from database.tables import User
 from handlers.main_menu import callback_main_menu
 from keyboards.callback_data import CallbackBackButton
 from .projects import projects_menu
@@ -12,7 +12,7 @@ back_button_router = Router()
 
 
 @back_button_router.callback_query(CallbackBackButton.filter())
-async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton, user: Users, state: FSMContext,
+async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton, user: User, state: FSMContext,
                       bot: Bot):
     await state.clear()
     if callback_data.button == 'to_main':

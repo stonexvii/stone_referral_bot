@@ -7,7 +7,7 @@ from aiogram.types import Message, InputMediaPhoto
 import config
 import messages
 from database import requests
-from database.tables import Users
+from database.tables import User
 from fsm.states import NewReferral
 from keyboards import ikb_back
 from middlewares.middleware import UserMiddleware
@@ -19,7 +19,7 @@ fsm_router.message.middleware(UserMiddleware())
 
 
 @fsm_router.message(NewReferral.input_name)
-async def input_name(message: Message, state: FSMContext, user: Users, bot: Bot):
+async def input_name(message: Message, state: FSMContext, user: User, bot: Bot):
     data = await state.get_data()
     if message.from_user.username:
         await requests.new_referral(
@@ -57,7 +57,7 @@ async def input_name(message: Message, state: FSMContext, user: Users, bot: Bot)
 
 
 @fsm_router.message(NewReferral.input_user_name)
-async def input_username(message: Message, state: FSMContext, user: Users, bot: Bot):
+async def input_username(message: Message, state: FSMContext, user: User, bot: Bot):
     tg_user_name = message.text
     if tg_user_name.startswith('http'):
         tg_user_name = '@' + tg_user_name.rsplit('/', 1)[-1]

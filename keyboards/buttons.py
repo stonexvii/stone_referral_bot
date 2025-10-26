@@ -56,7 +56,7 @@ class ProjectButton:
     def __init__(self, text: str, button: str):
         self.text = text
         self.callback_data = CallbackProject(
-            button=button,
+            callback=button,
         )
 
     def as_kwargs(self):

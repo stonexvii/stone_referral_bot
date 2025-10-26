@@ -2,45 +2,62 @@ from aiogram import Router, Bot, F
 from aiogram.types import CallbackQuery, InputMediaPhoto
 
 from keyboards import ikb_dispersal_menu, ikb_projects_menu, ikb_event_fix, ikb_thx_for_event, ikb_ai_event_agent, \
-    ikb_congrats_robot
+    ikb_congrats_robot, ikb_project_menu
 from keyboards.callback_data import CallbackMainMenu, CallbackProject
 from utils import FileManager
+from database import requests
 
 projects_router = Router()
 
-projects = {
-    'ai_event_agent': ikb_ai_event_agent(),
-    'dispersal': ikb_dispersal_menu(),
-    'event_fix': ikb_event_fix(),
-    'thx_for_event': ikb_thx_for_event(),
-    'congrats_robot': ikb_congrats_robot(),
-}
+
+# projects = {
+#     'ai_event_agent': ikb_ai_event_agent(),
+#     'dispersal': ikb_dispersal_menu(),
+#     'event_fix': ikb_event_fix(),
+#     'thx_for_event': ikb_thx_for_event(),
+#     'congrats_robot': ikb_congrats_robot(),
+# }
 
 
 @projects_router.callback_query(CallbackMainMenu.filter(F.button == 'projects'))
 async def projects_menu(callback: CallbackQuery, bot: Bot):
-    media = await FileManager.media_kwargs(
-        text='projects_menu',
+    # media = await FileManager.media_kwargs(
+    #     text='projects_menu',
+    # )
+    projects = await requests.get_all_projects()
+    projects_list = '\n\n'.join(item.mini_desc for item in projects)
+    msg_data = await requests.get_menu(
+        'projects_menu',
+        projects=projects_list,
     )
+    # await requests.get_all_projects()
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        media=InputMediaPhoto(**media),
-        reply_markup=ikb_projects_menu(),
+        media=InputMediaPhoto(**msg_data),
+        reply_markup=ikb_projects_menu(projects),
     )
 
 
 @projects_router.callback_query(CallbackProject.filter())
-async def dispersal_handler(callback: CallbackQuery, callback_data: CallbackProject, bot: Bot):
-    if callback_data.button in projects:
-        media = await FileManager.media_kwargs(
-            text=callback_data.button,
-        )
+async def project_handler(callback: CallbackQuery, callback_data: CallbackProject, bot: Bot):
+    project = await requests.get_project(
+        callback_data.callback,
+        as_kwargs=False,
+    )
+    if project.is_active:
+
+        # media = await FileManager.media_kwargs(
+        #     text=callback_data.button,
+        # )
         await bot.edit_message_media(
             chat_id=callback.from_user.id,
             message_id=callback.message.message_id,
-            media=InputMediaPhoto(**media),
-            reply_markup=projects[callback_data.button],
+            media=InputMediaPhoto(
+                media=project.media[0].media_id,
+                caption=project.description,
+            ),
+            reply_markup=ikb_project_menu(),
         )
     else:
         await callback.answer(

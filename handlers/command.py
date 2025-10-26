@@ -4,7 +4,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from database import requests
-from database.tables import Users
+from database.tables import User
+# from database.requests import get_menu_item
 from keyboards import ikb_main_menu
 from middlewares.middleware import UserMiddleware
 from utils import FileManager
@@ -15,16 +16,21 @@ command_router.message.middleware(UserMiddleware())
 
 
 @command_router.message(Command('start'))
-async def command_start(message: Message, user: Users, command: CommandObject, state: FSMContext, bot: Bot):
+async def command_start(message: Message, user: User, command: CommandObject, state: FSMContext, bot: Bot):
+    # msg_data = await requests.get_menu_item('main_menu', as_kwargs=False, name=user.name)
+    # data = await requests.get_menu_item('main_menu')
+
     if user:
-        media = await FileManager.media_kwargs(
-            text='main_menu',
-            name=user.name,
-        )
+        msg_data = await requests.get_menu('main_menu', as_kwargs=False, name=user.name)
+        # print(msg_data)
+        # media = await FileManager.media_kwargs(
+        #     text='main_menu',
+        #     name=user.name,
+        # )
         await bot.send_photo(
             chat_id=message.from_user.id,
-            photo=media['media'],
-            caption=media['caption'],
+            photo=msg_data.media_id,
+            caption=msg_data.text,
             reply_markup=ikb_main_menu(user),
         )
     else:
@@ -32,7 +38,7 @@ async def command_start(message: Message, user: Users, command: CommandObject, s
 
 
 @command_router.message(Command('rename'))
-async def rename_user(message: Message, user: Users, command: CommandObject):
+async def rename_user(message: Message, user: User, command: CommandObject):
     if user and command.args:
         await message.answer(
             text=f'''Я обновил твое имя в нашей базе данных

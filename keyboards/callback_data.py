@@ -18,4 +18,4 @@ class CallbackWelcome(CallbackData, prefix='CW'):
 
 
 class CallbackProject(CallbackData, prefix='CP'):
-    button: str
+    callback: str

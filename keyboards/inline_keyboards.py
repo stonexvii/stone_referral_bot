@@ -1,6 +1,6 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from database.tables import Users
+from database.tables import User, Menu, Project
 from .buttons import MainMenuButton, ReferralMenuButton, BackButton, WelcomeButton, ProjectButton
 
 
@@ -10,7 +10,7 @@ def ikb_welcome(text: str, callback: str):
     return keyboard.as_markup()
 
 
-def ikb_main_menu(user: Users):
+def ikb_main_menu(user: User):
     keyboard = InlineKeyboardBuilder()
     buttons = [
         MainMenuButton('⭐️ Кто такой Стоун? ⭐️', button='about_stone'),
@@ -40,16 +40,24 @@ def ikb_about_menu():
     return keyboard.as_markup()
 
 
-def ikb_projects_menu():
+def ikb_projects_menu(projects: list[Project]):
     keyboard = InlineKeyboardBuilder()
     buttons = [
-        ProjectButton('💡 Разгоны 💡', 'dispersal'),
-        ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
-        ProjectButton('🤦🏻‍♂️ Спасибо, б@#ть, за праздник! 🤦🏻‍♂️', 'thx_for_event'),
-        ProjectButton('🤖 ИИвент-агент 🤖', 'ai_event_agent'),
-        ProjectButton('🤖 О, поздравляю! 🤖', 'congrats_robot'),
-        MainMenuButton('Канал', url='https://t.me/stone_live'),
-    ]
+        ProjectButton(project.button, project.name) for project in projects
+        # ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
+        # ProjectButton('🤦🏻‍♂️ Спасибо, б@#ть, за праздник! 🤦🏻‍♂️', 'thx_for_event'),
+        # ProjectButton('🤖 ИИвент-агент 🤖', 'ai_event_agent'),
+        # ProjectButton('🤖 О, поздравляю! 🤖', 'congrats_robot'),
+        # MainMenuButton('Канал', url='https://t.me/stone_live'),
+    ] + [MainMenuButton('Канал', url='https://t.me/stone_live')]
+    # buttons = [
+    #     ProjectButton('💡 Разгоны 💡', 'dispersal'),
+    #     ProjectButton('🛠 Ремонт мероприятий 🛠', 'event_fix'),
+    #     ProjectButton('🤦🏻‍♂️ Спасибо, б@#ть, за праздник! 🤦🏻‍♂️', 'thx_for_event'),
+    #     ProjectButton('🤖 ИИвент-агент 🤖', 'ai_event_agent'),
+    #     ProjectButton('🤖 О, поздравляю! 🤖', 'congrats_robot'),
+    #     MainMenuButton('Канал', url='https://t.me/stone_live'),
+    # ]
     for button in buttons:
         keyboard.button(**button.as_kwargs())
     keyboard.button(**BackButton('Назад', 'to_main').as_kwargs())
@@ -116,7 +124,7 @@ def ikb_congrats_robot():
     return keyboard.as_markup()
 
 
-def ikb_referrals_menu(user: Users):
+def ikb_referrals_menu(user: User):
     keyboard = InlineKeyboardBuilder()
     if user.is_referral:
         buttons = [
