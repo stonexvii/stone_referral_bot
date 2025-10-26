@@ -1,8 +1,5 @@
-from collections import namedtuple
-
+from database.tables import Project, Button
 from .callback_data import CallbackMainMenu, CallbackReferral, CallbackBackButton, CallbackWelcome, CallbackProject
-
-Button = namedtuple('Button', ['text', 'callback'])
 
 
 class MainMenuButton:
@@ -53,11 +50,23 @@ class WelcomeButton:
 
 
 class ProjectButton:
-    def __init__(self, text: str, button: str):
-        self.text = text
+    def __init__(self, project: Project):
+        self.text = project.button
         self.callback_data = CallbackProject(
-            callback=button,
+            callback=project.name,
         )
+
+    def as_kwargs(self):
+        return self.__dict__
+
+
+class ProjectInlineButton:
+    def __init__(self, button: Button):
+        self.text = button.text
+        if button.callback:
+            pass
+        if button.url:
+            self.url = button.url
 
     def as_kwargs(self):
         return self.__dict__

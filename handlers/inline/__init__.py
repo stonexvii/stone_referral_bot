@@ -1,11 +1,10 @@
 from aiogram import Router
 
-from .about import about_router
-from .referrals import referrals_router
-from .projects import projects_router
-from .back_buttons import back_button_router
-
 from middlewares.middleware import UserMiddleware
+from .about import about_router
+from .back_buttons import back_button_router
+from .projects import projects_router
+from .referrals import referrals_router
 
 inline_router = Router()
 inline_router.callback_query.middleware(UserMiddleware())

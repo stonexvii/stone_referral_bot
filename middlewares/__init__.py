@@ -1,5 +1,6 @@
-from .middleware import AdminMiddleware
+from .middleware import AdminMiddleware, UserMiddleware
 
 __all__ = [
     'AdminMiddleware',
+    'UserMiddleware',
 ]

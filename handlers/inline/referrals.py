@@ -1,5 +1,4 @@
 from aiogram import Router, Bot, F
-from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InputMediaPhoto
 
 import config
@@ -9,7 +8,6 @@ from handlers.main_menu import callback_main_menu
 from keyboards import ikb_back, ikb_referrals_menu
 from keyboards.callback_data import CallbackMainMenu, CallbackReferral
 from middlewares.middleware import UserMiddleware
-from utils import FileManager
 
 referrals_router = Router()
 referrals_router.callback_query.middleware(UserMiddleware())
@@ -18,20 +16,12 @@ referrals_router.callback_query.middleware(UserMiddleware())
 @referrals_router.callback_query(CallbackMainMenu.filter(F.button == 'referrals_menu'))
 async def referrals_menu_handler(callback: CallbackQuery, user: User, bot: Bot):
     if user.is_referral:
-        media = await FileManager.media_kwargs(
-            text='referral_menu',
-            name=user.name,
-            user_id=user.id,
-        )
         msg_data = await requests.get_menu(
             'referral_menu',
             name=user.name,
             user_id=user.id,
         )
     else:
-        media = await FileManager.media_kwargs(
-            text='referral_menu_new',
-        )
         msg_data = await requests.get_menu(
             'referral_menu_new',
         )
@@ -67,10 +57,6 @@ async def new_referral_handler(callback: CallbackQuery, user: User, bot: Bot):
 async def my_referrals(callback: CallbackQuery, user: User, bot: Bot):
     referrals_list = await requests.get_referrals(user.id)
     if referrals_list:
-        media = await FileManager.media_kwargs(
-            text='my_referrals',
-            name=user.name,
-        )
         msg_data = await requests.get_menu(
             'my_referrals',
             name=user.name,

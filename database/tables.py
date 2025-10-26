@@ -27,20 +27,9 @@ class Menu(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(900), default='Какой-то меню')
     button: Mapped[str] = mapped_column(String(900), nullable=True)
-    # callback: Mapped[str] = mapped_column(String(900), nullable=True)
-    # url: Mapped[str] = mapped_column(String(900), nullable=True)
-    # button_url: Mapped[str] = mapped_column(String(900), nullable=True)
     description: Mapped[str] = mapped_column(String(4000), default='Описание')
-    # mini_desc: Mapped[str] = mapped_column(String(900), default='Описание')
-    # is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    # is_project: Mapped[bool] = mapped_column(Boolean, default=False)
-    # photo_id: Mapped[str] = mapped_column(
-    #     String(900),
-    #     default='AgACAgIAAxkBAAIBsGjyqomMjDEPwhKkY7fTJe8M753GAAJW-TEbeX-YSzMwXEKrbLNGAQADAgADcwADNgQ',
-    # )
 
     media = relationship('Media', back_populates='menu')
-    # buttons = relationship('Button', back_populates='menu')
 
 
 class Project(Base):
@@ -49,17 +38,9 @@ class Project(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(900), default='Какой-то меню')
     button: Mapped[str] = mapped_column(String(900), nullable=True)
-    # callback: Mapped[str] = mapped_column(String(900), nullable=True)
-    # url: Mapped[str] = mapped_column(String(900), nullable=True)
-    # button_url: Mapped[str] = mapped_column(String(900), nullable=True)
     description: Mapped[str] = mapped_column(String(4000), default='Описание')
     mini_desc: Mapped[str] = mapped_column(String(900), default='Описание')
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    # is_project: Mapped[bool] = mapped_column(Boolean, default=False)
-    # photo_id: Mapped[str] = mapped_column(
-    #     String(900),
-    #     default='AgACAgIAAxkBAAIBsGjyqomMjDEPwhKkY7fTJe8M753GAAJW-TEbeX-YSzMwXEKrbLNGAQADAgADcwADNgQ',
-    # )
 
     media = relationship('Media', back_populates='project')
     buttons = relationship('Button', back_populates='project')
@@ -84,5 +65,4 @@ class Button(Base):
     callback: Mapped[str] = mapped_column(String(900), nullable=True)
     url: Mapped[str] = mapped_column(String(900), nullable=True)
 
-    # menu = relationship('Menu', back_populates='button')
     project = relationship('Project', back_populates='buttons')

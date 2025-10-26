@@ -2,11 +2,9 @@ from aiogram import Router
 
 from .admin import admin_router
 from .command import command_router
-from .inline import inline_router
 from .fsm import fsm_router
+from .inline import inline_router
 from .welcome import welcome_router
-
-from middlewares.middleware import AdminMiddleware, UserMiddleware
 
 main_router = Router()
 

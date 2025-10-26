@@ -1,36 +1,21 @@
 from aiogram import Router, Bot, F
 from aiogram.types import CallbackQuery, InputMediaPhoto
 
-from keyboards import ikb_dispersal_menu, ikb_projects_menu, ikb_event_fix, ikb_thx_for_event, ikb_ai_event_agent, \
-    ikb_congrats_robot, ikb_project_menu
-from keyboards.callback_data import CallbackMainMenu, CallbackProject
-from utils import FileManager
 from database import requests
+from keyboards import ikb_projects_menu, ikb_project_menu
+from keyboards.callback_data import CallbackMainMenu, CallbackProject
 
 projects_router = Router()
 
 
-# projects = {
-#     'ai_event_agent': ikb_ai_event_agent(),
-#     'dispersal': ikb_dispersal_menu(),
-#     'event_fix': ikb_event_fix(),
-#     'thx_for_event': ikb_thx_for_event(),
-#     'congrats_robot': ikb_congrats_robot(),
-# }
-
-
 @projects_router.callback_query(CallbackMainMenu.filter(F.button == 'projects'))
 async def projects_menu(callback: CallbackQuery, bot: Bot):
-    # media = await FileManager.media_kwargs(
-    #     text='projects_menu',
-    # )
     projects = await requests.get_all_projects()
     projects_list = '\n\n'.join(item.mini_desc for item in projects)
     msg_data = await requests.get_menu(
         'projects_menu',
         projects=projects_list,
     )
-    # await requests.get_all_projects()
     await bot.edit_message_media(
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
@@ -46,10 +31,6 @@ async def project_handler(callback: CallbackQuery, callback_data: CallbackProjec
         as_kwargs=False,
     )
     if project.is_active:
-
-        # media = await FileManager.media_kwargs(
-        #     text=callback_data.button,
-        # )
         await bot.edit_message_media(
             chat_id=callback.from_user.id,
             message_id=callback.message.message_id,
@@ -57,7 +38,7 @@ async def project_handler(callback: CallbackQuery, callback_data: CallbackProjec
                 media=project.media[0].media_id,
                 caption=project.description,
             ),
-            reply_markup=ikb_project_menu(),
+            reply_markup=ikb_project_menu(project),
         )
     else:
         await callback.answer(

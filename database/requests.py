@@ -1,18 +1,15 @@
+from collections import namedtuple
 from datetime import date
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from .db_engine import async_session, engine
-from .tables import Base, User, Menu, Media, Project, Button
 from sqlalchemy.orm import selectinload
 
-from collections import namedtuple
+from .db_engine import async_session, engine
+from .tables import Base, User, Menu, Project
 
 MenuData = namedtuple('MenuData', ['text', 'media_id'])
 
-
-# ProjectData = namedtuple('ProjectData', [''])
 
 def connection(function):
     async def wrapper(*args, **kwargs):

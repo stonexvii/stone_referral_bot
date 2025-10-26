@@ -9,7 +9,6 @@ from database.tables import User
 from keyboards import ikb_about_menu
 from keyboards.callback_data import CallbackMainMenu
 from middlewares.middleware import UserMiddleware
-from utils import FileManager
 
 about_router = Router()
 about_router.callback_query.middleware(UserMiddleware())
@@ -17,9 +16,6 @@ about_router.callback_query.middleware(UserMiddleware())
 
 @about_router.callback_query(CallbackMainMenu.filter(F.button == 'about_stone'))
 async def about_handler(callback: CallbackQuery, bot: Bot):
-    media = await FileManager.media_kwargs(
-        text='about',
-    )
     msg_data = await requests.get_menu(
         'about',
     )
