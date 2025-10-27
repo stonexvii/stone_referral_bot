@@ -1,1 +1,1 @@
-from .states import Slideshow, NewUser, NewReferral
+from .states import Portfolio, NewUser, NewReferral

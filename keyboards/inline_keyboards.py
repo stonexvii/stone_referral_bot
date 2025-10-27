@@ -30,7 +30,7 @@ def ikb_main_menu(user: User):
 def ikb_about_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
-        MainMenuButton('Портфолио', button='portfolio'),
+        PortfolioButton('Портфолио', callback='portfolio'),
         MainMenuButton('Канал', url='https://t.me/stone_live'),
         MainMenuButton('Скачать PDF', button='download_pdf'),
         BackButton('Назад'),
@@ -41,15 +41,29 @@ def ikb_about_menu():
     return keyboard.as_markup()
 
 
-def ikb_portfolio():
+def ikb_portfolio(trigger: bool, admin: bool):
     keyboard = InlineKeyboardBuilder()
-    buttons = [
-        PortfolioButton('Дальше', 'next'),
-        BackButton('Назад'),
-    ]
+    slide_show = {
+        'text': 'Стоп' if trigger else 'Авто',
+        'callback': 'stop_slideshow' if trigger else 'start_slideshow',
+    }
+    if trigger:
+        buttons = [
+            PortfolioButton(**slide_show),
+            BackButton('Назад', 'to_about'),
+        ]
+    else:
+
+        if admin:
+            keyboard.button(**PortfolioButton('Удалить', 'delete').as_kwargs())
+        buttons = [
+            PortfolioButton(**slide_show),
+            PortfolioButton('Дальше', 'portfolio'),
+            BackButton('Назад', 'to_about'),
+        ]
     for button in buttons:
         keyboard.button(**button.as_kwargs())
-    keyboard.adjust(1, 2, 1)
+    keyboard.adjust(3, 1)
     return keyboard.as_markup()
 
 

@@ -10,5 +10,6 @@ class NewUser(StatesGroup):
     input_name = State()
 
 
-class Slideshow(StatesGroup):
-    running = State()
+class Portfolio(StatesGroup):
+    slideshow = State()
+    manual = State()

@@ -11,9 +11,9 @@ inline_router = Router()
 inline_router.callback_query.middleware(UserMiddleware())
 
 inline_router.include_routers(
+    portfolio_router,
     about_router,
     back_button_router,
     projects_router,
     referrals_router,
-    portfolio_router,
 )

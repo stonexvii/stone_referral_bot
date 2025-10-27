@@ -9,10 +9,10 @@ from database import requests
 
 class AdminMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
     ) -> Any:
         if event.from_user.id == config.ADMIN_TG_ID:
             result = await handler(event, data)
@@ -21,11 +21,14 @@ class AdminMiddleware(BaseMiddleware):
 
 class UserMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any]
     ) -> Any:
         user = await requests.get_user(event.from_user.id)
         data['user'] = user
+        data['admin'] = False
+        if event.from_user.id == config.ADMIN_TG_ID:
+            data['admin'] = True
         return await handler(event, data)
