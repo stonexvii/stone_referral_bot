@@ -8,3 +8,7 @@ class NewReferral(StatesGroup):
 
 class NewUser(StatesGroup):
     input_name = State()
+
+
+class Slideshow(StatesGroup):
+    running = State()
