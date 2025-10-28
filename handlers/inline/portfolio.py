@@ -62,8 +62,7 @@ async def create_slideshow(callback: CallbackQuery, state: FSMContext, admin: bo
 
 
 @portfolio_router.callback_query(CallbackPortfolio.filter(F.button == 'portfolio'))
-async def portfolio_menu(callback: CallbackQuery, callback_data: CallbackPortfolio, bot: Bot, admin: bool,
-                         state: FSMContext):
+async def portfolio_menu(callback: CallbackQuery, bot: Bot, admin: bool, state: FSMContext):
     await state.set_state(Portfolio.manual)
     portfolio = await requests.get_menu('portfolio', full=True)
     media = await next_photo(portfolio, state)
