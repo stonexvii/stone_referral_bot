@@ -1,11 +1,13 @@
+import asyncio
+
 from aiogram import Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
-import asyncio
+
 from database.tables import User
 from handlers.main_menu import callback_main_menu
-from .about import about_handler
 from keyboards.callback_data import CallbackBackButton
+from .about import about_handler
 from .projects import projects_menu
 from .referrals import referrals_menu_handler
 
@@ -22,7 +24,8 @@ async def get_task(task_name: str):
 @back_button_router.callback_query(CallbackBackButton.filter())
 async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton, user: User, state: FSMContext,
                       bot: Bot):
-    await state.clear()
+    if callback_data.button != 'to_about':
+        await state.clear()
     if callback_data.button == 'to_main':
         await callback_main_menu(callback, user, bot)
     elif callback_data.button == 'to_referrals':

@@ -41,7 +41,7 @@ def ikb_about_menu():
     return keyboard.as_markup()
 
 
-def ikb_portfolio(trigger: bool, admin: bool):
+def ikb_portfolio(trigger: bool, media_id: int, admin: bool):
     keyboard = InlineKeyboardBuilder()
     slide_show = {
         'text': 'Стоп' if trigger else 'Авто',
@@ -55,7 +55,7 @@ def ikb_portfolio(trigger: bool, admin: bool):
     else:
 
         if admin:
-            keyboard.button(**PortfolioButton('Удалить', 'delete').as_kwargs())
+            keyboard.button(**PortfolioButton('Удалить', 'delete_media', media_id).as_kwargs())
         buttons = [
             PortfolioButton(**slide_show),
             PortfolioButton('Дальше', 'portfolio'),

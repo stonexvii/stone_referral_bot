@@ -18,10 +18,11 @@ class MainMenuButton:
 
 
 class PortfolioButton:
-    def __init__(self, text: str, callback: str):
+    def __init__(self, text: str, callback: str, idx: int = 0):
         self.text = text
         self.callback_data = CallbackPortfolio(
             button=callback,
+            idx=idx,
         )
 
     def as_kwargs(self):

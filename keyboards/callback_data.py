@@ -7,6 +7,7 @@ class CallbackMainMenu(CallbackData, prefix='CMM'):
 
 class CallbackPortfolio(CallbackData, prefix='CP'):
     button: str
+    idx: int = 0
 
 
 class CallbackReferral(CallbackData, prefix='CR'):

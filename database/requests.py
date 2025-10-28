@@ -108,3 +108,10 @@ async def add_portfolio(file_id: str, desc: str, session: AsyncSession):
     )
     session.add(media)
     await session.commit()
+
+
+@connection
+async def delete_media(media_id: int, session: AsyncSession):
+    media = await session.scalar(select(Media).where(Media.id == media_id))
+    await session.delete(media)
+    await session.commit()
