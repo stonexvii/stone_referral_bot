@@ -11,7 +11,7 @@ projects_router = Router()
 @projects_router.callback_query(CallbackMainMenu.filter(F.button == 'projects'))
 async def projects_menu(callback: CallbackQuery, bot: Bot):
     projects = await requests.get_all_projects()
-    projects_list = '\n\n'.join(item.mini_desc for item in projects)
+    projects_list = '\n'.join(item.mini_desc for item in projects)
     msg_data = await requests.get_menu(
         'projects_menu',
         projects=projects_list,

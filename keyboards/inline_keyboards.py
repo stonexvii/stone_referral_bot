@@ -31,7 +31,7 @@ def ikb_about_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
         PortfolioButton('Портфолио', callback='portfolio'),
-        MainMenuButton('Канал', url='https://t.me/stone_live'),
+        MainMenuButton('Канал "Стоун LIVE"', url='https://t.me/stone_live'),
         MainMenuButton('Скачать PDF', button='download_pdf'),
         BackButton('Назад'),
     ]
@@ -70,11 +70,11 @@ def ikb_portfolio(trigger: bool, media_id: int, admin: bool):
 def ikb_projects_menu(projects: list[Project]):
     keyboard = InlineKeyboardBuilder()
     buttons = [ProjectButton(project) for project in projects]
-    buttons += [MainMenuButton('Канал', url='https://t.me/stone_live')]
+    buttons += [MainMenuButton('Канал "Стоун LIVE"', url='https://t.me/stone_live')]
     for button in buttons:
         keyboard.button(**button.as_kwargs())
     keyboard.button(**BackButton('Назад', 'to_main').as_kwargs())
-    keyboard.adjust(1)
+    keyboard.adjust(2)
     return keyboard.as_markup()
 
 
