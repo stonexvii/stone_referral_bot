@@ -36,7 +36,7 @@ async def back_button(callback: CallbackQuery, callback_data: CallbackBackButton
         task_name = await state.get_value('task_name')
         if task_name:
             task = await get_task(task_name)
-            if not task.done():
+            if task and not task.done():
                 task.cancel()
         await state.clear()
         await about_handler(callback, bot)
